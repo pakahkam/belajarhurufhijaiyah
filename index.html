@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Belajar Huruf Hijaiyah Ceria</title>
+    <!-- Tailwind CSS CDN for easy, responsive, and aesthetic styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom font for display, ensuring good look for Hijaiyah and friendly text */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); /* Soft gradient background */
+        }
+        .hijaiyah-display {
+            font-size: 8rem; /* Very large font for the letter */
+            line-height: 1;
+            font-family: Arial, sans-serif; /* Ensure clear display for Arabic script */
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .quiz-button {
+            transition: transform 0.1s;
+        }
+        .quiz-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Header Section (Colorful and Engaging) -->
+    <header class="text-center mb-8 p-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl shadow-lg">
+        <h1 class="text-3xl sm:text-4xl font-black tracking-tight">
+            <i class="fas fa-book-open mr-2"></i> Belajar Hijaiyah Ceria!
+        </h1>
+        <p class="text-sm sm:text-base mt-1 opacity-90">Untuk Sahabat PAI Bersama Pak Ahkam (Warna-Warni Penuh Makna)</p>
+    </header>
+
+    <!-- Main Navigation (Tabs) -->
+    <nav class="flex justify-center space-x-2 sm:space-x-4 mb-8" id="tab-navigation">
+        <button data-tab="pengenalan" class="tab-btn bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
+            <i class="fas fa-graduation-cap mr-1"></i> Pengenalan
+        </button>
+        <button data-tab="langkah" class="tab-btn bg-green-400 hover:bg-green-500 text-gray-800 font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
+            <i class="fas fa-list-ol mr-1"></i> Langkah
+        </button>
+        <button data-tab="kuis" class="tab-btn bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
+            <i class="fas fa-gamepad mr-1"></i> Kuis Ceria
+        </button>
+    </nav>
+
+    <!-- Content Containers -->
+    <main class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-xl card-shadow">
+
+        <!-- 1. Pengenalan Huruf Section -->
+        <section id="pengenalan" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 text-purple-700 border-b-2 border-purple-300 pb-2">1. Kenalan dengan Huruf Hijaiyah</h2>
+            <div class="text-center p-6 sm:p-10 rounded-lg bg-blue-100 shadow-inner">
+                
+                <!-- Display Area -->
+                <div id="hijaiyah-display-area" class="flex flex-col items-center justify-center min-h-[250px] mb-6">
+                    <span id="current-letter" class="hijaiyah-display font-black" style="color: var(--current-color);">?</span>
+                    <p id="current-name" class="text-3xl font-bold mt-4 text-gray-800 p-2 rounded-lg bg-white shadow-md">Nama Huruf</p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-center space-x-4">
+                    <button id="prev-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 disabled:opacity-50">
+                        <i class="fas fa-arrow-left"></i> Sebelumnya
+                    </button>
+                    <button id="next-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 disabled:opacity-50">
+                        Selanjutnya <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <p id="counter" class="text-sm mt-4 text-gray-600">Huruf 1 dari 20</p>
+            </div>
+        </section>
+
+        <!-- 2. Langkah-Langkah Belajar Section -->
+        <section id="langkah" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4 text-green-700 border-b-2 border-green-300 pb-2">2. Langkah-Langkah Cepat Belajar!</h2>
+            <p class="mb-4 text-gray-600">Ikuti langkah-langkah mudah ini agar kamu cepat mahir membaca huruf Hijaiyah!</p>
+            
+            <ol class="list-none space-y-4">
+                <!-- Step 1 -->
+                <li class="p-4 bg-red-100 rounded-lg shadow-md flex items-start">
+                    <span class="text-2xl font-black text-red-600 mr-4">1.</span>
+                    <div>
+                        <p class="font-bold text-red-700">Lihat dan Ingat Bentuknya!</p>
+                        <p class="text-sm text-gray-700">Perhatikan betul bentuk setiap huruf. Misalnya, huruf 'Ba' punya satu titik di bawah, seperti perahu kecil dengan kargo di dalamnya!</p>
+                    </div>
+                </li>
+                <!-- Step 2 -->
+                <li class="p-4 bg-yellow-100 rounded-lg shadow-md flex items-start">
+                    <span class="text-2xl font-black text-yellow-600 mr-4">2.</span>
+                    <div>
+                        <p class="font-bold text-yellow-700">Ucapkan Namanya dengan Jelas!</p>
+                        <p class="text-sm text-gray-700">Ulangi nama huruf itu berulang-ulang dengan suara yang ceria (Alif, Ba, Ta, dst.). Semakin sering diucapkan, semakin kuat di ingatan.</p>
+                    </div>
+                </li>
+                <!-- Step 3 -->
+                <li class="p-4 bg-blue-100 rounded-lg shadow-md flex items-start">
+                    <span class="text-2xl font-black text-blue-600 mr-4">3.</span>
+                    <div>
+                        <p class="font-bold text-blue-700">Hubungkan dengan Warna!</p>
+                        <p class="text-sm text-gray-700">Di bagian pengenalan, setiap huruf punya warna berbeda. Bayangkan warna itu setiap kamu melihat hurufnya! (Misal: Alif itu Merah, Ba itu Biru).</p>
+                    </div>
+                </li>
+                <!-- Step 4 -->
+                <li class="p-4 bg-pink-100 rounded-lg shadow-md flex items-start">
+                    <span class="text-2xl font-black text-pink-600 mr-4">4.</span>
+                    <div>
+                        <p class="font-bold text-pink-700">Coba Jawab di Kuis!</p>
+                        <p class="text-sm text-gray-700">Setelah yakin, langsung ke bagian Kuis Ceria untuk menguji ingatanmu. Semangat!</p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- 3. Kuis Ceria Section -->
+        <section id="kuis" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4 text-red-700 border-b-2 border-red-300 pb-2">3. Kuis Ceria: Tebak Huruf!</h2>
+            
+            <div id="quiz-container" class="p-6 bg-yellow-100 rounded-lg shadow-inner text-center">
+                <div id="quiz-question" class="mb-6">
+                    <p class="text-lg font-medium text-gray-700 mb-4">Huruf apakah ini?</p>
+                    <span id="quiz-letter" class="hijaiyah-display font-black text-red-500">?</span>
+                </div>
+                
+                <div id="quiz-options" class="grid grid-cols-2 gap-4">
+                    <!-- Options will be dynamically inserted here -->
+                </div>
+                
+                <div id="quiz-feedback" class="mt-6 font-bold text-xl min-h-[30px]"></div>
+                
+                <button id="next-quiz-btn" class="hidden mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
+                    Soal Berikutnya <i class="fas fa-chevron-right ml-1"></i>
+                </button>
+            </div>
+            
+            <div class="mt-6 p-3 bg-gray-200 rounded-lg text-center font-bold">
+                Skor Kamu: <span id="quiz-score" class="text-blue-600">0</span>
+            </div>
+        </section>
+
+        <!-- Notification Modal (Instead of alert()) -->
+        <div id="notification-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full text-center">
+                <p id="notification-message" class="text-xl font-bold mb-4 text-red-600">Pesan!</p>
+                <button id="close-modal-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Tutup</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Data Huruf Hijaiyah dengan warna ceria
+        const HIJAIYAH_DATA = [
+            { letter: 'ا', name: 'Alif', color: 'rgb(239, 68, 68)' },    // Red
+            { letter: 'ب', name: 'Ba', color: 'rgb(59, 130, 246)' },     // Blue
+            { letter: 'ت', name: 'Ta', color: 'rgb(16, 185, 129)' },     // Green
+            { letter: 'ث', name: 'Tsa', color: 'rgb(245, 158, 11)' },    // Yellow
+            { letter: 'ج', name: 'Jim', color: 'rgb(139, 92, 246)' },    // Violet
+            { letter: 'ح', name: 'Ha', color: 'rgb(236, 72, 153)' },     // Pink
+            { letter: 'خ', name: 'Kho', color: 'rgb(249, 115, 22)' },    // Orange
+            { letter: 'د', name: 'Dal', color: 'rgb(20, 184, 166)' },    // Teal
+            { letter: 'ذ', name: 'Dzal', color: 'rgb(107, 114, 128)' },  // Gray
+            { letter: 'ر', name: 'Ra', color: 'rgb(217, 70, 239)' },     // Magenta
+            { letter: 'ز', name: 'Zay', color: 'rgb(34, 197, 94)' },     // Lime Green
+            { letter: 'س', name: 'Sin', color: 'rgb(249, 250, 251)' },   // White (use shadow/border)
+            { letter: 'ش', name: 'Syin', color: 'rgb(251, 191, 36)' },   // Amber
+            { letter: 'ص', name: 'Shad', color: 'rgb(67, 56, 202)' },    // Indigo
+            { letter: 'ض', name: 'Dhod', color: 'rgb(234, 179, 8)' },    // Yellow-orange
+            { letter: 'ط', name: 'Tho', color: 'rgb(124, 58, 237)' },    // Purple
+            { letter: 'ظ', name: 'Zho', color: 'rgb(6, 182, 212)' },     // Cyan
+            { letter: 'ع', name: 'Ain', color: 'rgb(244, 63, 94)' },     // Rose
+            { letter: 'غ', name: 'Ghin', color: 'rgb(251, 146, 60)' },   // Dark Orange
+            { letter: 'ف', name: 'Fa', color: 'rgb(101, 163, 13)' },     // Olive Green
+            { letter: 'ق', name: 'Qaf', color: 'rgb(250, 204, 21)' },    // Gold
+            { letter: 'ك', name: 'Kaf', color: 'rgb(192, 132, 252)' },   // Light Purple
+            { letter: 'ل', name: 'Lam', color: 'rgb(52, 211, 153)' },    // Mint Green
+            { letter: 'م', name: 'Mim', color: 'rgb(253, 224, 71)' },    // Light Yellow
+            { letter: 'ن', name: 'Nun', color: 'rgb(248, 113, 113)' },   // Light Red
+            { letter: 'و', name: 'Waw', color: 'rgb(30, 64, 175)' },     // Dark Blue
+            { letter: 'ه', name: 'Ha\'', color: 'rgb(255, 193, 7)' },    // Yellowish
+            { letter: 'ء', name: 'Hamzah', color: 'rgb(148, 163, 184)' },// Blue Gray
+            { letter: 'ي', name: 'Ya', color: 'rgb(239, 68, 68)' }       // Red (reused)
+        ];
+
+        // --- Global State ---
+        let currentHijaiyahIndex = 0;
+        let quizScore = 0;
+        let quizQuestion = null;
+
+        // --- DOM Elements ---
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Pengenalan Elements
+        const currentLetterEl = document.getElementById('current-letter');
+        const currentNameEl = document.getElementById('current-name');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const counterEl = document.getElementById('counter');
+
+        // Quiz Elements
+        const quizContainerEl = document.getElementById('quiz-container');
+        const quizLetterEl = document.getElementById('quiz-letter');
+        const quizOptionsEl = document.getElementById('quiz-options');
+        const quizFeedbackEl = document.getElementById('quiz-feedback');
+        const nextQuizBtn = document.getElementById('next-quiz-btn');
+        const quizScoreEl = document.getElementById('quiz-score');
+
+        // Modal Elements
+        const modalEl = document.getElementById('notification-modal');
+        const modalMessageEl = document.getElementById('notification-message');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        // --- Utility Functions ---
+
+        /** Shows a custom notification modal */
+        function showNotification(message, isError = false) {
+            modalMessageEl.textContent = message;
+            modalMessageEl.className = `text-xl font-bold mb-4 ${isError ? 'text-red-600' : 'text-green-600'}`;
+            modalEl.classList.remove('hidden');
+            modalEl.classList.add('flex');
+        }
+
+        closeModalBtn.addEventListener('click', () => {
+            modalEl.classList.add('hidden');
+            modalEl.classList.remove('flex');
+        });
+
+        /** Shuffles an array (Fisher-Yates) */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- Tab Navigation Logic ---
+
+        function activateTab(tabId) {
+            // Deactivate all buttons and hide all content
+            tabButtons.forEach(btn => {
+                btn.classList.remove('bg-opacity-100', 'ring-4', 'ring-opacity-50');
+                btn.classList.add('bg-opacity-80');
+            });
+
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Activate target button and show target content
+            const targetBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('bg-opacity-100', 'ring-4', 'ring-opacity-50');
+                targetBtn.classList.remove('bg-opacity-80');
+            }
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Special initializations based on tab
+            if (tabId === 'pengenalan') {
+                updatePengenalanDisplay();
+            } else if (tabId === 'kuis') {
+                startNewQuiz();
+            }
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                activateTab(e.target.closest('button').dataset.tab);
+            });
+        });
+
+        // --- Pengenalan (Introduction) Logic ---
+
+        function updatePengenalanDisplay() {
+            const data = HIJAIYAH_DATA[currentHijaiyahIndex];
+            
+            // Apply letter and color
+            currentLetterEl.textContent = data.letter;
+            currentLetterEl.style.color = data.color;
+            currentNameEl.textContent = data.name;
+
+            // Update counter
+            counterEl.textContent = `Huruf ${currentHijaiyahIndex + 1} dari ${HIJAIYAH_DATA.length}`;
+
+            // Handle button states
+            prevBtn.disabled = currentHijaiyahIndex === 0;
+            nextBtn.disabled = currentHijaiyahIndex === HIJAIYAH_DATA.length - 1;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentHijaiyahIndex > 0) {
+                currentHijaiyahIndex--;
+                updatePengenalanDisplay();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentHijaiyahIndex < HIJAIYAH_DATA.length - 1) {
+                currentHijaiyahIndex++;
+                updatePengenalanDisplay();
+            }
+        });
+
+        // --- Kuis (Quiz) Logic ---
+
+        function generateQuizQuestion() {
+            // 1. Select the correct answer (the question)
+            const correctAnswer = HIJAIYAH_DATA[Math.floor(Math.random() * HIJAIYAH_DATA.length)];
+            
+            // 2. Select 3 random incorrect answers (excluding the correct one)
+            const incorrectAnswers = shuffleArray(
+                HIJAIYAH_DATA.filter(h => h.name !== correctAnswer.name)
+            ).slice(0, 3);
+
+            // 3. Combine and shuffle the options
+            let options = [...incorrectAnswers.map(h => h.name), correctAnswer.name];
+            options = shuffleArray(options);
+
+            return {
+                letter: correctAnswer.letter,
+                correctName: correctAnswer.name,
+                options: options
+            };
+        }
+
+        function renderQuizQuestion(question) {
+            quizOptionsEl.innerHTML = ''; // Clear previous options
+            quizFeedbackEl.textContent = ''; // Clear feedback
+            nextQuizBtn.classList.add('hidden');
+            
+            // Set the question letter and a colorful font color
+            quizLetterEl.textContent = question.letter;
+            quizLetterEl.style.color = HIJAIYAH_DATA.find(h => h.letter === question.letter)?.color || 'rgb(239, 68, 68)';
+
+            question.options.forEach(optionName => {
+                const button = document.createElement('button');
+                button.textContent = optionName;
+                button.className = 'quiz-button bg-pink-300 hover:bg-pink-400 text-gray-800 font-bold py-3 rounded-lg shadow-md transition duration-200';
+                button.dataset.answer = optionName;
+                button.addEventListener('click', handleAnswer);
+                quizOptionsEl.appendChild(button);
+            });
+
+            quizQuestion = question; // Store current question globally
+        }
+
+        function handleAnswer(event) {
+            // Disable all buttons to prevent multiple clicks
+            document.querySelectorAll('.quiz-button').forEach(btn => btn.disabled = true);
+
+            const selectedAnswer = event.target.dataset.answer;
+            const isCorrect = selectedAnswer === quizQuestion.correctName;
+
+            // Visual feedback on the selected button
+            event.target.classList.remove('bg-pink-300', 'hover:bg-pink-400');
+            if (isCorrect) {
+                event.target.classList.add('bg-green-500', 'text-white');
+                quizFeedbackEl.textContent = 'HEBAT! Jawaban Kamu Benar! 🎉';
+                quizFeedbackEl.classList.remove('text-red-600');
+                quizFeedbackEl.classList.add('text-green-600');
+                quizScore++;
+                quizScoreEl.textContent = quizScore;
+            } else {
+                event.target.classList.add('bg-red-500', 'text-white');
+                quizFeedbackEl.textContent = `Wah, kurang tepat. Jawaban yang benar adalah: ${quizQuestion.correctName}`;
+                quizFeedbackEl.classList.remove('text-green-600');
+                quizFeedbackEl.classList.add('text-red-600');
+                
+                // Highlight the correct answer
+                document.querySelectorAll('.quiz-button').forEach(btn => {
+                    if (btn.dataset.answer === quizQuestion.correctName) {
+                        btn.classList.remove('bg-pink-300');
+                        btn.classList.add('bg-green-300');
+                    }
+                });
+            }
+
+            nextQuizBtn.classList.remove('hidden');
+        }
+
+        nextQuizBtn.addEventListener('click', startNewQuiz);
+
+        function startNewQuiz() {
+            quizQuestion = generateQuizQuestion();
+            renderQuizQuestion(quizQuestion);
+            // Re-enable buttons for the new question
+            document.querySelectorAll('.quiz-button').forEach(btn => btn.disabled = false);
+        }
+
+        // --- Initialization ---
+        
+        // Function to run on page load
+        function initializeApp() {
+            activateTab('pengenalan'); // Start with the introduction tab
+            updatePengenalanDisplay();
+        }
+
+        initializeApp();
+
+    </script>
+</body>
+</html>
