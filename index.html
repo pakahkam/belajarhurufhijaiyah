@@ -4,412 +4,486 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Belajar Huruf Hijaiyah Ceria</title>
-    <!-- Tailwind CSS CDN for easy, responsive, and aesthetic styling -->
+    <!-- Memuat Tailwind CSS untuk styling yang cepat dan responsif -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Memuat ikon lucide-react (digunakan sebagai SVG inline) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Custom font for display, ensuring good look for Hijaiyah and friendly text */
+        /* Menggunakan font Inter sebagai standar */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); /* Soft gradient background */
+            background-color: #f0f9ff; /* Biru muda, melambangkan ketenangan dan ilmu */
         }
-        .hijaiyah-display {
-            font-size: 8rem; /* Very large font for the letter */
+        /* Styling untuk huruf Hijaiyah agar terlihat besar dan jelas */
+        .hijaiyah-text {
+            font-size: 8rem; /* Sangat besar */
             line-height: 1;
-            font-family: Arial, sans-serif; /* Ensure clear display for Arabic script */
+            font-weight: 700;
+            color: #4c1d95; /* Ungu gelap, melambangkan kebijaksanaan */
         }
-        .card-shadow {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .quiz-button {
+        /* Custom scrollbar untuk nuansa ceria */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fef9c3; /* Kuning cerah */ }
+        ::-webkit-scrollbar-thumb { background: #fcd34d; /* Kuning yang lebih gelap */ border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fbbf24; }
+        /* Animasi ceria untuk tombol */
+        .btn-bounce {
             transition: transform 0.1s;
         }
-        .quiz-button:active {
-            transform: scale(0.98);
+        .btn-bounce:active {
+            transform: scale(0.95);
+        }
+        /* Efek latar belakang untuk bagian-bagian utama */
+        .bg-gradient-joy {
+            background-image: linear-gradient(to right top, #a78bfa, #818cf8, #60a5fa, #38bdf8, #06b6d4); /* Gradient biru-ungu-cyan */
         }
     </style>
 </head>
-<body class="p-4 sm:p-8">
+<body class="min-h-screen antialiased">
 
-    <!-- Header Section (Colorful and Engaging) -->
-    <header class="text-center mb-8 p-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl shadow-lg">
-        <h1 class="text-3xl sm:text-4xl font-black tracking-tight">
-            <i class="fas fa-book-open mr-2"></i> Belajar Huruf Hijaiyah Ceria!
+<div id="app" class="max-w-4xl mx-auto p-4 md:p-8">
+    
+    <!-- Header Ceria -->
+    <header class="text-center mb-8 p-6 rounded-2xl bg-gradient-joy shadow-xl">
+        <h1 class="text-4xl font-extrabold text-white tracking-tight md:text-5xl">
+            Aplikasi Huruf Hijaiyah <span class="text-yellow-200">PAI!</span>
         </h1>
-        <p class="text-sm sm:text-base mt-1 opacity-90">Untuk Sahabat PAI (Warna-Warni Penuh Makna)</p>
+        <p class="text-lg mt-2 text-yellow-50 font-medium">
+            Ayo kita kenali huruf-huruf Al-Qur'an dengan gembira dan penuh warna!
+        </p>
     </header>
 
-    <!-- Main Navigation (Tabs) -->
-    <nav class="flex justify-center space-x-2 sm:space-x-4 mb-8" id="tab-navigation">
-        <button data-tab="pengenalan" class="tab-btn bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
-            <i class="fas fa-graduation-cap mr-1"></i> Pengenalan
+    <!-- Navigasi Tabs -->
+    <nav class="flex justify-around bg-white p-2 rounded-xl shadow-lg mb-6">
+        <button id="tab-intro" onclick="switchTab('intro')" class="tab-button w-1/3 py-3 text-lg font-semibold rounded-xl transition-all duration-300 transform bg-yellow-400 text-purple-800 shadow-md hover:scale-[1.03] hover:bg-yellow-500">
+            Pengenalan Huruf
         </button>
-        <button data-tab="langkah" class="tab-btn bg-green-400 hover:bg-green-500 text-gray-800 font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
-            <i class="fas fa-list-ol mr-1"></i> Langkah
+        <button id="tab-steps" onclick="switchTab('steps')" class="tab-button w-1/3 py-3 text-lg font-semibold rounded-xl transition-all duration-300 transform text-gray-700 hover:bg-green-100 hover:scale-[1.03]">
+            Langkah-Langkah
         </button>
-        <button data-tab="kuis" class="tab-btn bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-full shadow-md transition duration-300">
-            <i class="fas fa-gamepad mr-1"></i> Kuis Ceria
+        <button id="tab-quiz" onclick="switchTab('quiz')" class="tab-button w-1/3 py-3 text-lg font-semibold rounded-xl transition-all duration-300 transform text-gray-700 hover:bg-red-100 hover:scale-[1.03]">
+            Kuis Seru (15 Soal)
         </button>
     </nav>
 
-    <!-- Content Containers -->
-    <main class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-xl card-shadow">
+    <!-- Konten Tab -->
+    <main class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl min-h-[500px]">
 
-        <!-- 1. Pengenalan Huruf Section -->
-        <section id="pengenalan" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 text-purple-700 border-b-2 border-purple-300 pb-2">1. Kenalan dengan Huruf Hijaiyah</h2>
-            <div class="text-center p-6 sm:p-10 rounded-lg bg-blue-100 shadow-inner">
-                
-                <!-- Display Area -->
-                <div id="hijaiyah-display-area" class="flex flex-col items-center justify-center min-h-[250px] mb-6">
-                    <span id="current-letter" class="hijaiyah-display font-black" style="color: var(--current-color);">?</span>
-                    <p id="current-name" class="text-3xl font-bold mt-4 text-gray-800 p-2 rounded-lg bg-white shadow-md">Nama Huruf</p>
+        <!-- 1. Pengenalan Huruf (Intro Tab) -->
+        <div id="intro-content" class="tab-content">
+            <h2 class="text-3xl font-bold text-purple-700 mb-6 border-b-2 pb-2 border-purple-200">
+                Papan Huruf Ajaib!
+            </h2>
+            
+            <!-- Area Tampilan Huruf -->
+            <div id="hijaiyah-display" class="text-center p-8 mb-6 rounded-xl shadow-inner border-4 border-yellow-300 bg-pink-50">
+                <p id="letter-arabic" class="hijaiyah-text">أ</p>
+                <p id="letter-name" class="text-4xl font-extrabold text-green-600 mt-2">Alif</p>
+                <div class="mt-4 p-3 bg-blue-100 text-blue-700 font-medium rounded-full inline-block shadow-inner">
+                    <span class="font-bold">Jenis Huruf:</span> <span id="letter-type">Tenggorokan (Halqiyah)</span>
                 </div>
-
-                <!-- Navigation Buttons -->
-                <div class="flex justify-center space-x-4">
-                    <button id="prev-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 disabled:opacity-50">
-                        <i class="fas fa-arrow-left"></i> Sebelumnya
-                    </button>
-                    <button id="next-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 disabled:opacity-50">
-                        Selanjutnya <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-                
-                <p id="counter" class="text-sm mt-4 text-gray-600">Huruf 1 dari 20</p>
             </div>
-        </section>
 
-        <!-- 2. Langkah-Langkah Belajar Section -->
-        <section id="langkah" class="tab-content hidden">
-            <h2 class="text-2xl font-bold mb-4 text-green-700 border-b-2 border-green-300 pb-2">2. Langkah-Langkah Cepat Belajar!</h2>
-            <p class="mb-4 text-gray-600">Ikuti langkah-langkah mudah ini agar kamu cepat mahir membaca huruf Hijaiyah!</p>
-            
-            <ol class="list-none space-y-4">
-                <!-- Step 1 -->
-                <li class="p-4 bg-red-100 rounded-lg shadow-md flex items-start">
-                    <span class="text-2xl font-black text-red-600 mr-4">1.</span>
-                    <div>
-                        <p class="font-bold text-red-700">Lihat dan Ingat Bentuknya!</p>
-                        <p class="text-sm text-gray-700">Perhatikan betul bentuk setiap huruf. Misalnya, huruf 'Ba' punya satu titik di bawah, seperti perahu kecil dengan kargo di dalamnya!</p>
-                    </div>
-                </li>
-                <!-- Step 2 -->
-                <li class="p-4 bg-yellow-100 rounded-lg shadow-md flex items-start">
-                    <span class="text-2xl font-black text-yellow-600 mr-4">2.</span>
-                    <div>
-                        <p class="font-bold text-yellow-700">Ucapkan Namanya dengan Jelas!</p>
-                        <p class="text-sm text-gray-700">Ulangi nama huruf itu berulang-ulang dengan suara yang ceria (Alif, Ba, Ta, dst.). Semakin sering diucapkan, semakin kuat di ingatan.</p>
-                    </div>
-                </li>
-                <!-- Step 3 -->
-                <li class="p-4 bg-blue-100 rounded-lg shadow-md flex items-start">
-                    <span class="text-2xl font-black text-blue-600 mr-4">3.</span>
-                    <div>
-                        <p class="font-bold text-blue-700">Hubungkan dengan Warna!</p>
-                        <p class="text-sm text-gray-700">Di bagian pengenalan, setiap huruf punya warna berbeda. Bayangkan warna itu setiap kamu melihat hurufnya! (Misal: Alif itu Merah, Ba itu Biru).</p>
-                    </div>
-                </li>
-                <!-- Step 4 -->
-                <li class="p-4 bg-pink-100 rounded-lg shadow-md flex items-start">
-                    <span class="text-2xl font-black text-pink-600 mr-4">4.</span>
-                    <div>
-                        <p class="font-bold text-pink-700">Coba Jawab di Kuis!</p>
-                        <p class="text-sm text-gray-700">Setelah yakin, langsung ke bagian Kuis Ceria untuk menguji ingatanmu. Semangat!</p>
-                    </div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- 3. Kuis Ceria Section -->
-        <section id="kuis" class="tab-content hidden">
-            <h2 class="text-2xl font-bold mb-4 text-red-700 border-b-2 border-red-300 pb-2">3. Kuis Ceria: Tebak Huruf!</h2>
-            
-            <div id="quiz-container" class="p-6 bg-yellow-100 rounded-lg shadow-inner text-center">
-                <div id="quiz-question" class="mb-6">
-                    <p class="text-lg font-medium text-gray-700 mb-4">Huruf apakah ini?</p>
-                    <span id="quiz-letter" class="hijaiyah-display font-black text-red-500">?</span>
+            <!-- Kontrol Navigasi -->
+            <div class="flex justify-between items-center mt-6">
+                <button onclick="navigateLetter(-1)" class="btn-bounce bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center">
+                    <span class="h-6 w-6 mr-2">
+                        <script>document.write(lucide.createIcons()['arrow-left'].toSvg({ class: 'h-6 w-6' }));</script>
+                    </span>
+                    Sebelumnya
+                </button>
+                <div id="letter-index-status" class="text-xl font-bold text-gray-600">
+                    1 / 29
                 </div>
-                
-                <div id="quiz-options" class="grid grid-cols-2 gap-4">
-                    <!-- Options will be dynamically inserted here -->
-                </div>
-                
-                <div id="quiz-feedback" class="mt-6 font-bold text-xl min-h-[30px]"></div>
-                
-                <button id="next-quiz-btn" class="hidden mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
-                    Soal Berikutnya <i class="fas fa-chevron-right ml-1"></i>
+                <button onclick="navigateLetter(1)" class="btn-bounce bg-yellow-500 hover:bg-yellow-600 text-purple-800 font-bold py-3 px-6 rounded-full shadow-lg flex items-center">
+                    Selanjutnya
+                    <span class="h-6 w-6 ml-2">
+                        <script>document.write(lucide.createIcons()['arrow-right'].toSvg({ class: 'h-6 w-6' }));</script>
+                    </span>
                 </button>
             </div>
-            
-            <div class="mt-6 p-3 bg-gray-200 rounded-lg text-center font-bold">
-                Skor Kamu: <span id="quiz-score" class="text-blue-600">0</span>
-            </div>
-        </section>
+        </div>
 
-        <!-- Notification Modal (Instead of alert()) -->
-        <div id="notification-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 hidden items-center justify-center p-4 z-50">
-            <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full text-center">
-                <p id="notification-message" class="text-xl font-bold mb-4 text-red-600">Pesan!</p>
-                <button id="close-modal-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Tutup</button>
+        <!-- 2. Langkah-Langkah (Steps Tab) -->
+        <div id="steps-content" class="tab-content hidden">
+            <h2 class="text-3xl font-bold text-green-700 mb-6 border-b-2 pb-2 border-green-200">
+                🚀 5 Langkah Jitu Mahir Hijaiyah
+            </h2>
+            <div class="space-y-6">
+                <!-- Langkah 1: Merah (Perhatian/Fokus) -->
+                <div class="flex p-4 rounded-xl shadow-md bg-red-100 border-l-8 border-red-500">
+                    <span class="text-red-600 text-3xl font-extrabold mr-4">1</span>
+                    <div>
+                        <h3 class="font-bold text-red-700 text-xl">Lihat dan Ingat Bentuknya</h3>
+                        <p class="text-gray-600">Perhatikan baik-baik bentuk hurufnya. Apakah ada titiknya? Berapa banyak? Merah melambangkan fokus yang kuat!</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 2: Biru (Ketenangan/Pengulangan) -->
+                <div class="flex p-4 rounded-xl shadow-md bg-blue-100 border-l-8 border-blue-500">
+                    <span class="text-blue-600 text-3xl font-extrabold mr-4">2</span>
+                    <div>
+                        <h3 class="font-bold text-blue-700 text-xl">Ucapkan Namanya</h3>
+                        <p class="text-gray-600">Sebutkan nama hurufnya dengan jelas (Alif, Ba', Ta'). Ulangi sampai hafal. Biru melambangkan pengulangan yang tenang.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 3: Kuning (Kegembiraan/Asal Suara) -->
+                <div class="flex p-4 rounded-xl shadow-md bg-yellow-100 border-l-8 border-yellow-500">
+                    <span class="text-yellow-600 text-3xl font-extrabold mr-4">3</span>
+                    <div>
+                        <h3 class="font-bold text-yellow-700 text-xl">Kenali Jenisnya (Makhraj)</h3>
+                        <p class="text-gray-600">Dari mana suara huruf itu keluar? Tenggorokan, lidah, atau bibir? Kuning melambangkan energi untuk mencoba!</p>
+                    </div>
+                </div>
+                
+                <!-- Langkah 4: Hijau (Kesempurnaan/Latihan) -->
+                <div class="flex p-4 rounded-xl shadow-md bg-green-100 border-l-8 border-green-500">
+                    <span class="text-green-600 text-3xl font-extrabold mr-4">4</span>
+                    <div>
+                        <h3 class="font-bold text-green-700 text-xl">Tulis dan Tirukan</h3>
+                        <p class="text-gray-600">Coba tulis huruf itu di udara atau di buku. Tiru bunyinya sesuai yang diajarkan guru. Hijau melambangkan pertumbuhan mahir.</p>
+                    </div>
+                </div>
+
+                <!-- Langkah 5: Ungu (Pencapaian/Ulangi) -->
+                <div class="flex p-4 rounded-xl shadow-md bg-purple-100 border-l-8 border-purple-500">
+                    <span class="text-purple-600 text-3xl font-extrabold mr-4">5</span>
+                    <div>
+                        <h3 class="font-bold text-purple-700 text-xl">Ayo Uji Diri!</h3>
+                        <p class="text-gray-600">Coba main KUIS! Ungu melambangkan pencapaian dan kebijaksanaan baru.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Kuis (Quiz Tab) -->
+        <div id="quiz-content" class="tab-content hidden">
+            <h2 class="text-3xl font-bold text-red-700 mb-6 border-b-2 pb-2 border-red-200">
+                🎯 Kuis Cerdas Hijaiyah! (15 Soal)
+            </h2>
+            
+            <!-- Tampilan Kuis Utama -->
+            <div id="quiz-main">
+                <p id="quiz-question-number" class="text-xl font-bold text-gray-500 mb-4">Soal ke 1 / 15</p>
+                
+                <!-- Kotak Soal -->
+                <div class="p-6 md:p-8 bg-indigo-50 rounded-xl border-4 border-indigo-300 shadow-inner mb-6">
+                    <p id="quiz-question-text" class="text-2xl md:text-3xl font-semibold text-indigo-800 mb-4">
+                        Huruf manakah yang bernama <span class="text-yellow-600 font-extrabold">Ta'</span>?
+                    </p>
+                    <p id="quiz-letter-display" class="text-9xl text-center text-purple-800 font-bold hidden">
+                        ب
+                    </p>
+                </div>
+                
+                <!-- Pilihan Jawaban -->
+                <div id="quiz-options" class="grid grid-cols-2 gap-4">
+                    <!-- Options will be generated here -->
+                </div>
+
+                <!-- Tombol Lanjut -->
+                <button id="quiz-next-btn" onclick="nextQuestion()" class="btn-bounce w-full mt-8 py-4 bg-purple-600 hover:bg-purple-700 text-white text-xl font-bold rounded-xl shadow-xl transition duration-150 hidden">
+                    Soal Selanjutnya
+                </button>
+            </div>
+
+            <!-- Hasil Kuis -->
+            <div id="quiz-results" class="text-center hidden p-8 bg-green-50 rounded-xl border-4 border-green-400">
+                <p class="text-4xl font-extrabold text-green-700 mb-4">🎉 Selamat! Kuis Selesai! 🎉</p>
+                <p class="text-2xl font-semibold text-gray-700 mb-6">Nilai Akhir Anda:</p>
+                <div id="final-score" class="text-7xl font-black text-yellow-600 p-4 bg-white rounded-full inline-block shadow-lg border-4 border-yellow-400">
+                    <!-- Score will be inserted here -->
+                </div>
+                <button onclick="startQuiz()" class="btn-bounce w-full mt-8 py-4 bg-red-500 hover:bg-red-600 text-white text-xl font-bold rounded-xl shadow-xl transition duration-150">
+                    Ulangi Kuis
+                </button>
             </div>
         </div>
 
     </main>
+</div>
 
-    <script>
-        // Data Huruf Hijaiyah dengan warna ceria
-        const HIJAIYAH_DATA = [
-            { letter: 'ا', name: 'Alif', color: 'rgb(239, 68, 68)' },    // Red
-            { letter: 'ب', name: 'Ba', color: 'rgb(59, 130, 246)' },     // Blue
-            { letter: 'ت', name: 'Ta', color: 'rgb(16, 185, 129)' },     // Green
-            { letter: 'ث', name: 'Tsa', color: 'rgb(245, 158, 11)' },    // Yellow
-            { letter: 'ج', name: 'Jim', color: 'rgb(139, 92, 246)' },    // Violet
-            { letter: 'ح', name: 'Ha', color: 'rgb(236, 72, 153)' },     // Pink
-            { letter: 'خ', name: 'Kho', color: 'rgb(249, 115, 22)' },    // Orange
-            { letter: 'د', name: 'Dal', color: 'rgb(20, 184, 166)' },    // Teal
-            { letter: 'ذ', name: 'Dzal', color: 'rgb(107, 114, 128)' },  // Gray
-            { letter: 'ر', name: 'Ra', color: 'rgb(217, 70, 239)' },     // Magenta
-            { letter: 'ز', name: 'Zay', color: 'rgb(34, 197, 94)' },     // Lime Green
-            { letter: 'س', name: 'Sin', color: 'rgb(249, 250, 251)' },   // White (use shadow/border)
-            { letter: 'ش', name: 'Syin', color: 'rgb(251, 191, 36)' },   // Amber
-            { letter: 'ص', name: 'Shad', color: 'rgb(67, 56, 202)' },    // Indigo
-            { letter: 'ض', name: 'Dhod', color: 'rgb(234, 179, 8)' },    // Yellow-orange
-            { letter: 'ط', name: 'Tho', color: 'rgb(124, 58, 237)' },    // Purple
-            { letter: 'ظ', name: 'Zho', color: 'rgb(6, 182, 212)' },     // Cyan
-            { letter: 'ع', name: 'Ain', color: 'rgb(244, 63, 94)' },     // Rose
-            { letter: 'غ', name: 'Ghin', color: 'rgb(251, 146, 60)' },   // Dark Orange
-            { letter: 'ف', name: 'Fa', color: 'rgb(101, 163, 13)' },     // Olive Green
-            { letter: 'ق', name: 'Qaf', color: 'rgb(250, 204, 21)' },    // Gold
-            { letter: 'ك', name: 'Kaf', color: 'rgb(192, 132, 252)' },   // Light Purple
-            { letter: 'ل', name: 'Lam', color: 'rgb(52, 211, 153)' },    // Mint Green
-            { letter: 'م', name: 'Mim', color: 'rgb(253, 224, 71)' },    // Light Yellow
-            { letter: 'ن', name: 'Nun', color: 'rgb(248, 113, 113)' },   // Light Red
-            { letter: 'و', name: 'Waw', color: 'rgb(30, 64, 175)' },     // Dark Blue
-            { letter: 'ه', name: 'Ha\'', color: 'rgb(255, 193, 7)' },    // Yellowish
-            { letter: 'ء', name: 'Hamzah', color: 'rgb(148, 163, 184)' },// Blue Gray
-            { letter: 'ي', name: 'Ya', color: 'rgb(239, 68, 68)' }       // Red (reused)
-        ];
+<script>
+    // Data Huruf Hijaiyah (29 huruf)
+    const HIJAIYAH_DATA = [
+        { arabic: "أ", name: "Alif", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "ب", name: "Ba'", type: "Bibir (Syafawiyah)" },
+        { arabic: "ت", name: "Ta'", type: "Lidah (Lisawiyah)" },
+        { arabic: "ث", name: "Tsa'", type: "Lidah (Lisawiyah)" },
+        { arabic: "ج", name: "Jim", type: "Tengah Lidah (Syajariyah)" },
+        { arabic: "ح", name: "Ha'", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "خ", name: "Kha'", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "د", name: "Dal", type: "Lidah (Nith'iyah)" },
+        { arabic: "ذ", name: "Dzal", type: "Lidah (Lisawiyah)" },
+        { arabic: "ر", name: "Ra'", type: "Ujung Lidah (Dzaulqiyah)" },
+        { arabic: "ز", name: "Zay", type: "Lidah (Asaliyah)" },
+        { arabic: "س", name: "Sin", type: "Lidah (Asaliyah)" },
+        { arabic: "ش", name: "Syin", type: "Tengah Lidah (Syajariyah)" },
+        { arabic: "ص", name: "Shad", type: "Lidah (Asaliyah)" },
+        { arabic: "ض", name: "Dhad", type: "Tepi Lidah (Jaufiyah)" },
+        { arabic: "ط", name: "Tha'", type: "Lidah (Nith'iyah)" },
+        { arabic: "ظ", name: "Dza'", type: "Lidah (Lisawiyah)" },
+        { arabic: "ع", name: "Ain", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "غ", name: "Ghin", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "ف", name: "Fa'", type: "Bibir (Syafawiyah)" },
+        { arabic: "ق", name: "Qaf", type: "Pangkal Lidah (Lahatiah)" },
+        { arabic: "ك", name: "Kaf", type: "Pangkal Lidah (Lahatiah)" },
+        { arabic: "ل", name: "Lam", type: "Tepi Lidah (Nath'iyah)" },
+        { arabic: "م", name: "Mim", type: "Bibir (Syafawiyah)" },
+        { arabic: "ن", name: "Nun", type: "Ujung Lidah (Nath'iyah)" },
+        { arabic: "و", name: "Waw", type: "Bibir (Syafawiyah)" },
+        { arabic: "ه", name: "Ha", type: "Tenggorokan (Halqiyah)" },
+        { arabic: "ي", name: "Ya'", type: "Tengah Lidah (Syajariyah)" },
+        { arabic: "ء", name: "Hamzah", type: "Tenggorokan (Halqiyah)" }
+    ];
+    
+    // --- STATE MANAGEMENT ---
+    let currentTab = 'intro';
+    let currentLetterIndex = 0;
+    
+    let quizState = {
+        questions: [],
+        currentQuestionIndex: 0,
+        score: 0,
+        selectedAnswer: null,
+        isAnswered: false,
+        totalQuestions: 15
+    };
 
-        // --- Global State ---
-        let currentHijaiyahIndex = 0;
-        let quizScore = 0;
-        let quizQuestion = null;
+    // --- UTILITY FUNCTIONS ---
 
-        // --- DOM Elements ---
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
+    // Fungsi untuk mengacak array (Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // --- TAB LOGIC ---
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById(`${tabId}-content`).classList.remove('hidden');
         
-        // Pengenalan Elements
-        const currentLetterEl = document.getElementById('current-letter');
-        const currentNameEl = document.getElementById('current-name');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const counterEl = document.getElementById('counter');
-
-        // Quiz Elements
-        const quizContainerEl = document.getElementById('quiz-container');
-        const quizLetterEl = document.getElementById('quiz-letter');
-        const quizOptionsEl = document.getElementById('quiz-options');
-        const quizFeedbackEl = document.getElementById('quiz-feedback');
-        const nextQuizBtn = document.getElementById('next-quiz-btn');
-        const quizScoreEl = document.getElementById('quiz-score');
-
-        // Modal Elements
-        const modalEl = document.getElementById('notification-modal');
-        const modalMessageEl = document.getElementById('notification-message');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-
-        // --- Utility Functions ---
-
-        /** Shows a custom notification modal */
-        function showNotification(message, isError = false) {
-            modalMessageEl.textContent = message;
-            modalMessageEl.className = `text-xl font-bold mb-4 ${isError ? 'text-red-600' : 'text-green-600'}`;
-            modalEl.classList.remove('hidden');
-            modalEl.classList.add('flex');
-        }
-
-        closeModalBtn.addEventListener('click', () => {
-            modalEl.classList.add('hidden');
-            modalEl.classList.remove('flex');
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('bg-yellow-400', 'text-purple-800', 'shadow-md', 'hover:bg-green-100', 'hover:bg-red-100');
+            btn.classList.add('text-gray-700');
         });
 
-        /** Shuffles an array (Fisher-Yates) */
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // --- Tab Navigation Logic ---
-
-        function activateTab(tabId) {
-            // Deactivate all buttons and hide all content
-            tabButtons.forEach(btn => {
-                btn.classList.remove('bg-opacity-100', 'ring-4', 'ring-opacity-50');
-                btn.classList.add('bg-opacity-80');
-            });
-
-            tabContents.forEach(content => {
-                content.classList.add('hidden');
-            });
-
-            // Activate target button and show target content
-            const targetBtn = document.querySelector(`[data-tab="${tabId}"]`);
-            if (targetBtn) {
-                targetBtn.classList.add('bg-opacity-100', 'ring-4', 'ring-opacity-50');
-                targetBtn.classList.remove('bg-opacity-80');
-            }
-            document.getElementById(tabId).classList.remove('hidden');
-
-            // Special initializations based on tab
-            if (tabId === 'pengenalan') {
-                updatePengenalanDisplay();
-            } else if (tabId === 'kuis') {
-                startNewQuiz();
+        const activeBtn = document.getElementById(`tab-${tabId}`);
+        activeBtn.classList.remove('text-gray-700');
+        activeBtn.classList.add('shadow-md', 'text-purple-800');
+        
+        // Custom color per tab
+        if (tabId === 'intro') {
+            activeBtn.classList.add('bg-yellow-400', 'hover:bg-yellow-500');
+        } else if (tabId === 'steps') {
+            activeBtn.classList.add('bg-green-300', 'hover:bg-green-400');
+        } else if (tabId === 'quiz') {
+            activeBtn.classList.add('bg-red-300', 'hover:bg-red-400');
+            if (quizState.questions.length === 0) {
+                 startQuiz();
             }
         }
+        currentTab = tabId;
+    }
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                activateTab(e.target.closest('button').dataset.tab);
-            });
-        });
+    // --- INTRO LOGIC ---
 
-        // --- Pengenalan (Introduction) Logic ---
+    function updateLetterDisplay() {
+        const letter = HIJAIYAH_DATA[currentLetterIndex];
+        
+        document.getElementById('letter-arabic').textContent = letter.arabic;
+        document.getElementById('letter-name').textContent = letter.name;
+        document.getElementById('letter-type').textContent = letter.type;
+        document.getElementById('letter-index-status').textContent = `${currentLetterIndex + 1} / ${HIJAIYAH_DATA.length}`;
+    }
 
-        function updatePengenalanDisplay() {
-            const data = HIJAIYAH_DATA[currentHijaiyahIndex];
-            
-            // Apply letter and color
-            currentLetterEl.textContent = data.letter;
-            currentLetterEl.style.color = data.color;
-            currentNameEl.textContent = data.name;
+    function navigateLetter(direction) {
+        currentLetterIndex = (currentLetterIndex + direction + HIJAIYAH_DATA.length) % HIJAIYAH_DATA.length;
+        updateLetterDisplay();
+    }
 
-            // Update counter
-            counterEl.textContent = `Huruf ${currentHijaiyahIndex + 1} dari ${HIJAIYAH_DATA.length}`;
+    // --- QUIZ LOGIC ---
 
-            // Handle button states
-            prevBtn.disabled = currentHijaiyahIndex === 0;
-            nextBtn.disabled = currentHijaiyahIndex === HIJAIYAH_DATA.length - 1;
-        }
+    function generateQuizQuestions() {
+        const questions = [];
+        const allLetters = HIJAIYAH_DATA;
 
-        prevBtn.addEventListener('click', () => {
-            if (currentHijaiyahIndex > 0) {
-                currentHijaiyahIndex--;
-                updatePengenalanDisplay();
-            }
-        });
+        // Shuffle letters to pick random questions
+        const shuffledLetters = shuffleArray([...allLetters]);
 
-        nextBtn.addEventListener('click', () => {
-            if (currentHijaiyahIndex < HIJAIYAH_DATA.length - 1) {
-                currentHijaiyahIndex++;
-                updatePengenalanDisplay();
-            }
-        });
+        for (let i = 0; i < quizState.totalQuestions; i++) {
+            const letter = shuffledLetters[i % shuffledLetters.length];
+            const type = i % 2 === 0 ? 'arabic_to_name' : 'name_to_arabic';
+            let questionText;
+            let correctAnswer;
 
-        // --- Kuis (Quiz) Logic ---
-
-        function generateQuizQuestion() {
-            // 1. Select the correct answer (the question)
-            const correctAnswer = HIJAIYAH_DATA[Math.floor(Math.random() * HIJAIYAH_DATA.length)];
-            
-            // 2. Select 3 random incorrect answers (excluding the correct one)
-            const incorrectAnswers = shuffleArray(
-                HIJAIYAH_DATA.filter(h => h.name !== correctAnswer.name)
-            ).slice(0, 3);
-
-            // 3. Combine and shuffle the options
-            let options = [...incorrectAnswers.map(h => h.name), correctAnswer.name];
-            options = shuffleArray(options);
-
-            return {
-                letter: correctAnswer.letter,
-                correctName: correctAnswer.name,
-                options: options
-            };
-        }
-
-        function renderQuizQuestion(question) {
-            quizOptionsEl.innerHTML = ''; // Clear previous options
-            quizFeedbackEl.textContent = ''; // Clear feedback
-            nextQuizBtn.classList.add('hidden');
-            
-            // Set the question letter and a colorful font color
-            quizLetterEl.textContent = question.letter;
-            quizLetterEl.style.color = HIJAIYAH_DATA.find(h => h.letter === question.letter)?.color || 'rgb(239, 68, 68)';
-
-            question.options.forEach(optionName => {
-                const button = document.createElement('button');
-                button.textContent = optionName;
-                button.className = 'quiz-button bg-pink-300 hover:bg-pink-400 text-gray-800 font-bold py-3 rounded-lg shadow-md transition duration-200';
-                button.dataset.answer = optionName;
-                button.addEventListener('click', handleAnswer);
-                quizOptionsEl.appendChild(button);
-            });
-
-            quizQuestion = question; // Store current question globally
-        }
-
-        function handleAnswer(event) {
-            // Disable all buttons to prevent multiple clicks
-            document.querySelectorAll('.quiz-button').forEach(btn => btn.disabled = true);
-
-            const selectedAnswer = event.target.dataset.answer;
-            const isCorrect = selectedAnswer === quizQuestion.correctName;
-
-            // Visual feedback on the selected button
-            event.target.classList.remove('bg-pink-300', 'hover:bg-pink-400');
-            if (isCorrect) {
-                event.target.classList.add('bg-green-500', 'text-white');
-                quizFeedbackEl.textContent = 'HEBAT! Jawaban Kamu Benar! 🎉';
-                quizFeedbackEl.classList.remove('text-red-600');
-                quizFeedbackEl.classList.add('text-green-600');
-                quizScore++;
-                quizScoreEl.textContent = quizScore;
+            if (type === 'arabic_to_name') {
+                // Tipe 1: Apa nama huruf ini? (Tampilkan Arab, tebak Nama)
+                questionText = `Apa nama untuk huruf <span class="text-yellow-600 font-extrabold">${letter.arabic}</span>?`;
+                correctAnswer = letter.name;
             } else {
-                event.target.classList.add('bg-red-500', 'text-white');
-                quizFeedbackEl.textContent = `Wah, kurang tepat. Jawaban yang benar adalah: ${quizQuestion.correctName}`;
-                quizFeedbackEl.classList.remove('text-green-600');
-                quizFeedbackEl.classList.add('text-red-600');
-                
-                // Highlight the correct answer
-                document.querySelectorAll('.quiz-button').forEach(btn => {
-                    if (btn.dataset.answer === quizQuestion.correctName) {
-                        btn.classList.remove('bg-pink-300');
-                        btn.classList.add('bg-green-300');
-                    }
-                });
+                // Tipe 2: Manakah huruf ini? (Tampilkan Nama, tebak Arab)
+                questionText = `Huruf manakah yang bernama <span class="text-yellow-600 font-extrabold">${letter.name}</span>?`;
+                correctAnswer = letter.arabic;
             }
 
-            nextQuizBtn.classList.remove('hidden');
+            // Generate 3 wrong options
+            const wrongOptions = [];
+            while (wrongOptions.length < 3) {
+                const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
+                let option = (type === 'arabic_to_name') ? randomLetter.name : randomLetter.arabic;
+
+                if (option !== correctAnswer && !wrongOptions.includes(option)) {
+                    wrongOptions.push(option);
+                }
+            }
+
+            const allOptions = shuffleArray([correctAnswer, ...wrongOptions]);
+            
+            questions.push({
+                type,
+                arabic: letter.arabic, // for reference
+                name: letter.name,     // for reference
+                questionText,
+                correctAnswer,
+                options: allOptions,
+                userAnswer: null
+            });
+        }
+        return questions;
+    }
+
+    function startQuiz() {
+        quizState.questions = generateQuizQuestions();
+        quizState.currentQuestionIndex = 0;
+        quizState.score = 0;
+        quizState.selectedAnswer = null;
+        quizState.isAnswered = false;
+
+        document.getElementById('quiz-results').classList.add('hidden');
+        document.getElementById('quiz-main').classList.remove('hidden');
+        document.getElementById('quiz-next-btn').classList.add('hidden');
+
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        if (quizState.currentQuestionIndex >= quizState.totalQuestions) {
+            showResults();
+            return;
         }
 
-        nextQuizBtn.addEventListener('click', startNewQuiz);
-
-        function startNewQuiz() {
-            quizQuestion = generateQuizQuestion();
-            renderQuizQuestion(quizQuestion);
-            // Re-enable buttons for the new question
-            document.querySelectorAll('.quiz-button').forEach(btn => btn.disabled = false);
-        }
-
-        // --- Initialization ---
+        const q = quizState.questions[quizState.currentQuestionIndex];
         
-        // Function to run on page load
-        function initializeApp() {
-            activateTab('pengenalan'); // Start with the introduction tab
-            updatePengenalanDisplay();
+        document.getElementById('quiz-question-number').textContent = `Soal ke ${quizState.currentQuestionIndex + 1} / ${quizState.totalQuestions}`;
+        document.getElementById('quiz-question-text').innerHTML = q.questionText;
+        document.getElementById('quiz-next-btn').classList.add('hidden');
+        
+        // Tampilkan huruf besar jika tipenya "name_to_arabic" (menebak huruf)
+        const letterDisplay = document.getElementById('quiz-letter-display');
+        if (q.type === 'arabic_to_name') {
+            letterDisplay.textContent = q.arabic;
+            letterDisplay.classList.remove('hidden');
+            document.getElementById('quiz-question-text').classList.add('hidden');
+        } else {
+            // Sembunyikan jika tipenya "arabic_to_name" (menebak nama)
+            letterDisplay.classList.add('hidden');
+            document.getElementById('quiz-question-text').classList.remove('hidden');
         }
 
-        initializeApp();
+        const optionsContainer = document.getElementById('quiz-options');
+        optionsContainer.innerHTML = '';
+        
+        q.options.forEach((option, index) => {
+            const isArabic = q.type === 'name_to_arabic';
+            
+            const btn = document.createElement('button');
+            btn.classList.add('quiz-option-btn', 'btn-bounce', 'p-4', 'rounded-xl', 'text-xl', 'font-bold', 'shadow-lg', 'bg-blue-100', 'hover:bg-blue-200', 'text-blue-800', 'transition', 'duration-100', 'border-4', 'border-blue-300');
+            
+            // Atur ukuran teks lebih besar untuk huruf Arab
+            if (isArabic) {
+                btn.classList.add('text-6xl', 'font-extrabold');
+            } else {
+                btn.classList.add('text-2xl');
+            }
 
-    </script>
+            btn.textContent = option;
+            btn.onclick = () => selectAnswer(option, btn);
+            optionsContainer.appendChild(btn);
+        });
+
+        quizState.selectedAnswer = null;
+        quizState.isAnswered = false;
+    }
+
+    function selectAnswer(selectedOption, button) {
+        if (quizState.isAnswered) return;
+
+        quizState.isAnswered = true;
+        quizState.selectedAnswer = selectedOption;
+        
+        const q = quizState.questions[quizState.currentQuestionIndex];
+        const isCorrect = selectedOption === q.correctAnswer;
+        
+        q.userAnswer = selectedOption; // Simpan jawaban
+        
+        if (isCorrect) {
+            quizState.score++;
+        }
+
+        // Feedback visual
+        document.querySelectorAll('.quiz-option-btn').forEach(btn => {
+            btn.disabled = true;
+            btn.classList.remove('bg-blue-100', 'hover:bg-blue-200', 'text-blue-800', 'border-blue-300');
+            
+            if (btn === button) {
+                // Jawaban yang dipilih
+                if (isCorrect) {
+                    btn.classList.add('bg-green-400', 'text-white', 'border-green-600'); // Hijau: Benar (Pertumbuhan)
+                } else {
+                    btn.classList.add('bg-red-400', 'text-white', 'border-red-600'); // Merah: Salah (Perhatian)
+                }
+            } else if (btn.textContent === q.correctAnswer) {
+                 // Jawaban yang benar
+                btn.classList.add('bg-green-200', 'text-green-800', 'border-green-400');
+            } else {
+                // Jawaban yang salah dan tidak dipilih
+                btn.classList.add('bg-gray-100', 'text-gray-400', 'border-gray-200');
+            }
+        });
+
+        document.getElementById('quiz-next-btn').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        quizState.currentQuestionIndex++;
+        displayQuestion();
+    }
+
+    function showResults() {
+        document.getElementById('quiz-main').classList.add('hidden');
+        document.getElementById('quiz-results').classList.remove('hidden');
+        
+        const scorePercentage = Math.round((quizState.score / quizState.totalQuestions) * 100);
+        document.getElementById('final-score').textContent = `${quizState.score}/${quizState.totalQuestions} (${scorePercentage}%)`;
+    }
+
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLetterDisplay();
+        switchTab('intro'); // Ensure the intro tab is active and styled correctly on load
+        // Initial setup for the quiz questions, but keep quiz tab hidden
+        startQuiz(); 
+    });
+
+</script>
+
 </body>
 </html>
